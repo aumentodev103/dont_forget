@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "824378940377",
+    "project_id": "don-t-forget--reminder-app",
+    "storage_bucket": "don-t-forget--reminder-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824378940377:android:5e6d50fef70455cb0397c8",
+        "android_client_info": {
+          "package_name": "com.aumento_flutter.dont_forget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824378940377-dnloeiu0tis6h15aetotnunajbgtuage.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgnGkbuPYnOvaLaDP3WvPdc0HzJuRQM_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824378940377-dnloeiu0tis6h15aetotnunajbgtuage.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
