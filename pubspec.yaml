@@ -45,6 +45,7 @@ dependencies:
   pinput: ^1.2.2
   http: ^0.13.4
   flutter_login_facebook: ^1.2.0
+  twitter_login: ^4.0.1
   
   
  

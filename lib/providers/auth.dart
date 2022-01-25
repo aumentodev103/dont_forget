@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 enum AuthMode { enterPhoneNumber, enterOTP }
 
@@ -303,5 +304,47 @@ class Auth with ChangeNotifier {
       print('Error is => ${e.toString()}');
       return null;
     }
+  }
+
+  Future<UserCredential> signInWithTwitter() async {
+    final twitterLogin = TwitterLogin(
+      apiKey: "VR6NVjLkOjKdn9ZT6CdMavdXP",
+      apiSecretKey: "Xa2HsfPfTi0AWItbPUjSTXwxc8x5wzZqPzgqd849zaStIiAkx8",
+      redirectURI: "don-t-forget--reminder-app://",
+    );
+    // Trigger the sign-in flow
+    final authResult = await twitterLogin.login();
+
+    // Create a credential from the access token
+    final twitterAuthCredential = TwitterAuthProvider.credential(
+      accessToken: authResult.authToken!,
+      secret: authResult.authTokenSecret!,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance
+        .signInWithCredential(twitterAuthCredential);
+    // final authResult = await twitterLogin.login();
+
+    // switch (authResult.status) {
+    //   case TwitterLoginStatus.loggedIn:
+    //     final AuthCredential twitterAuthCredential =
+    //         TwitterAuthProvider.credential(
+    //             accessToken: authResult.authToken!,
+    //             secret: authResult.authTokenSecret!);
+
+    //     final userCredential = await FirebaseAuth.instance
+    //         .signInWithCredential(twitterAuthCredential);
+    //     print(userCredential);
+    //     break;
+    //   case TwitterLoginStatus.cancelledByUser:
+    //     print(authResult.errorMessage);
+    //     break;
+    //   case TwitterLoginStatus.error:
+    //     print(authResult.errorMessage);
+    //     break;
+    //   default:
+    //     return;
+    // }
   }
 }

@@ -71,7 +71,13 @@ class SocialIconsWidget extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () async {
+            try {
+              auth.signInWithTwitter();
+            } catch (error) {
+              print("Error is $error");
+            }
+          },
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(width: 1),
