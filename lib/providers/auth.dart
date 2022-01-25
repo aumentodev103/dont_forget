@@ -3,6 +3,8 @@ import 'package:dont_forget/screens/user_details_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 enum AuthMode { enterPhoneNumber, enterOTP }
 
@@ -102,6 +104,13 @@ class Auth with ChangeNotifier {
     loggedUser = user;
     FirebaseDatabase database = FirebaseDatabase.instance;
     final ref = "Users/${user.uid}/user_info/";
+    DatabaseReference dbRef = database.ref().child(ref);
+    await dbRef.once().then((snapshot) {
+      DataSnapshot dataSnapshot = snapshot.snapshot;
+      if (dataSnapshot.value != null) {
+        from = "user-details";
+      }
+    });
 
     await database.ref(ref).update({
       "displayName": user.displayName,
@@ -215,5 +224,84 @@ class Auth with ChangeNotifier {
         .catchError((error) {
       debugPrint("the following error occurred => $error");
     });
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  // Future<FacebookAuthCredential> signInWithFacebook() async {
+  //   print("Facebook Login");
+  //   // Trigger the sign-in flow
+  //   final LoginResult loginResult = await FacebookAuth.instance.login();
+  //   print("Facebook Login $loginResult");
+  //   // Create a credential from the access token
+  //   final OAuthCredential facebookAuthCredential =
+  //       FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+  //   // Once signed in, return the UserCredential
+  //   return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  // }
+
+  Future<OAuthCredential?> loginWithFacebook() async {
+    final fb = FacebookLogin();
+    try {
+      // Log in
+      final res = await fb.logIn(permissions: [
+        FacebookPermission.publicProfile,
+        FacebookPermission.email,
+      ]);
+
+// Check result status
+      switch (res.status) {
+        case FacebookLoginStatus.success:
+          // Logged in
+
+          // Send access token to server for validation and auth
+          final FacebookAccessToken accessToken =
+              res.accessToken as FacebookAccessToken;
+          print('Access token: ${accessToken.token}');
+
+          // Get profile data
+          final profile = await fb.getUserProfile();
+          if (profile != null) {
+            print('Hello, ${profile.name}! You ID: ${profile.userId}');
+            // Get user profile image url
+            final imageUrl = await fb.getProfileImageUrl(width: 100);
+            print('Your profile image: $imageUrl');
+
+            // Get email (since we request email permission)
+            final email = await fb.getUserEmail();
+            // But user can decline permission
+            if (email != null) print('And your email is $email');
+          }
+
+          break;
+        case FacebookLoginStatus.cancel:
+          // User cancel log in
+          break;
+        case FacebookLoginStatus.error:
+          // Log in failed
+          print('Error while log in: ${res.error}');
+          break;
+      }
+    } catch (e) {
+      print('Error is => ${e.toString()}');
+      return null;
+    }
   }
 }

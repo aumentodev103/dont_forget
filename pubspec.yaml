@@ -31,17 +31,22 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  ####################################---- Added Dependencies -------########################
-  pinput: ^1.2.2
+  ####################################---- External Dependencies -------########################
   firebase_core: ^1.11.0
-  # firebase_analytics: ^9.0.5
+  firebase_database: ^9.0.5
   firebase_auth: ^3.3.5
+  google_sign_in: ^5.2.3
+  
+  
+  shared_preferences: ^2.0.12
   provider: ^6.0.2
   intl_phone_field: ^3.0.0
   intl: ^0.17.0
-  firebase_database: ^9.0.5
-  shared_preferences: ^2.0.12
-  firebase_analytics: ^9.0.5
+  pinput: ^1.2.2
+  http: ^0.13.4
+  flutter_login_facebook: ^1.2.0
+  
+  
  
 
 

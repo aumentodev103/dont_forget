@@ -305,8 +305,17 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                             ),
                                             initialCountryCode: 'IN',
                                             // controller: _phoneNumberController,
+                                            onChanged: (value) {
+                                              changeUserMethod("phoneNumber",
+                                                  value.completeNumber);
+                                            },
                                             onSaved: (value) {
-                                              debugPrint(value as String);
+                                              if (value == null) {
+                                                return;
+                                              }
+                                              changeUserMethod("phoneNumber",
+                                                  value.completeNumber);
+                                              debugPrint(value.toString());
                                             },
                                             validator: (value) {
                                               debugPrint(value);
